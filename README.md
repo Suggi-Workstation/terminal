@@ -25,7 +25,7 @@ If you are an agent or a guest, read in this order:
 
 ## House rules (short version)
 
-- ASCII only. Every file, no exceptions. A CI check enforces this in every repo.
+- ASCII only. Every file, no exceptions. ASCII check enforces this in every repo.
 - Hubs are shared; workspaces belong to one agent each.
 - Core files are approval-locked: only Suggi may approve edits.
 - Agents propose changes to core files; they never self-edit them.
