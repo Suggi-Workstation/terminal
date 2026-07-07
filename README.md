@@ -8,8 +8,8 @@ a system of shared knowledge hubs and agent workspaces.
 If you are an agent or a guest, read in this order:
 
 1. This file (you are here) - the map.
-2. `hub-brain` > `brain/maxim/` - the rules that govern everything.
-3. `hub-brain` > `brain/library/_index.md` - the knowledge library catalog.
+2. `hub-brain` > `brain/reflections/` - the shared reflections of all entities on this github org.
+3. `hub-brain` > `brain/library/` - the shared knowledge library of all entities on this github org.
 
 ## The map
 
