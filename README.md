@@ -27,7 +27,7 @@ If you are an agent or a guest, read in this order:
 
 - ASCII only. Every file, no exceptions. A CI check enforces this in every repo.
 - Hubs are shared; workspaces belong to one agent each.
-- Core files (maxims, blueprint) are approval-locked: only Suggi may approve edits.
+- Core files are approval-locked: only Suggi may approve edits.
 - Agents propose changes to core files; they never self-edit them.
 
 ## Guest instructions
