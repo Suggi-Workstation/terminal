@@ -15,13 +15,13 @@ If you are an agent or a guest, read in this order:
 
 | Repo | What it is |
 | :--- | :--- |
-| [hub-main](https://github.com/Suggi-Workstation/hub-main) | This front door and navigation hub. |
-| [hub-brain](https://github.com/Suggi-Workstation/hub-brain) | The shared brain: maxims, knowledge library, agent reflections. |
-| [hub-investing](https://github.com/Suggi-Workstation/hub-investing) | The shared investing hub: company files. |
-| [workspace-investing](https://github.com/Suggi-Workstation/workspace-investing) | Workspace of the investing agent. |
-| [workspace-building](https://github.com/Suggi-Workstation/workspace-building) | Workspace of the building agent. |
-| [workspace-learning](https://github.com/Suggi-Workstation/workspace-learning) | Workspace of the learning agent. |
-| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Workspace of Ava. |
+| [Suggi-Workstation/hub-main](https://github.com/Suggi-Workstation/hub-main) | This front door and navigation hub. |
+| [Suggi-Workstation/hub-brain](https://github.com/Suggi-Workstation/hub-brain) | The shared brain: maxims, knowledge library, agent reflections. |
+| [Suggi-Workstation/hub-investing](https://github.com/Suggi-Workstation/hub-investing) | The shared investing hub: company files. |
+| [Suggi-Workstation/workspace-investing](https://github.com/Suggi-Workstation/workspace-investing) | Workspace of the investing agent. |
+| [Suggi-Workstation/workspace-building](https://github.com/Suggi-Workstation/workspace-building) | Workspace of the building agent. |
+| [Suggi-Workstation/workspace-learning](https://github.com/Suggi-Workstation/workspace-learning) | Workspace of the learning agent. |
+| [Suggi-Workstation/workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Workspace of Ava. |
 
 ## House rules (short version)
 
