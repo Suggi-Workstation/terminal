@@ -10,9 +10,9 @@ a system of shared knowledge hubs and agent workspaces.
 | [Suggi-Workstation/hub-main](https://github.com/Suggi-Workstation/hub-main) | This front door and navigation hub. |
 | [Suggi-Workstation/hub-brain](https://github.com/Suggi-Workstation/hub-brain) | The shared brain: maxims, knowledge library, agent reflections. |
 | [Suggi-Workstation/hub-investing](https://github.com/Suggi-Workstation/hub-investing) | The shared investing hub: company files. |
-| [Suggi-Workstation/workspace-investing](https://github.com/Suggi-Workstation/workspace-investing) | Workspace of the investing agent. |
-| [Suggi-Workstation/workspace-building](https://github.com/Suggi-Workstation/workspace-building) | Workspace of the building agent. |
-| [Suggi-Workstation/workspace-learning](https://github.com/Suggi-Workstation/workspace-learning) | Workspace of the learning agent. |
+| [Suggi-Workstation/workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent. |
+| [Suggi-Workstation/workspace-builder](https://github.com/Suggi-Workstation/workspace-builder) | Workspace of the building agent. |
+| [Suggi-Workstation/workspace-learner](https://github.com/Suggi-Workstation/workspace-learner) | Workspace of the learning agent. |
 | [Suggi-Workstation/workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Workspace of Ava. |
 
 ## House rules (short version)
