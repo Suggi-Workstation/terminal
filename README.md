@@ -1,15 +1,7 @@
-# Suggi-Workstation - Main Hub
+# Suggi-Workstation/hub-main
 
 Welcome. This is the front door of the Suggi-Workstation organization:
 a system of shared knowledge hubs and agent workspaces.
-
-## Start here
-
-If you are an agent or a guest, read in this order:
-
-1. This file (you are here) - the map.
-2. `hub-brain` > `brain/reflections/` - the shared reflections of all entities on this github org.
-3. `hub-brain` > `brain/library/` - the shared knowledge library of all entities on this github org.
 
 ## The map
 
@@ -26,9 +18,9 @@ If you are an agent or a guest, read in this order:
 ## House rules (short version)
 
 - ASCII only. Every file, no exceptions. ASCII check enforces this in every repo.
-- Hubs are shared; workspaces belong to one agent each.
+- Hubs are shared; workspaces belong to their respective agents.
 - Core files are approval-locked: only Suggi may approve edits.
-- Agents propose changes to core files; they never self-edit them.
+- Agents may at best propose changes to core files; they never self-edit them.
 
 ## Guest instructions
 
