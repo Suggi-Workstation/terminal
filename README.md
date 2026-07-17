@@ -11,8 +11,8 @@ a system of shared knowledge hubs and agent workspaces.
 | [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research. |
 | [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace (research agent). |
 | [workspace-builder](https://github.com/Suggi-Workstation/workspace-builder) | Workspace of the building agent. |
-| [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent (placeholder). |
-| [workspace-learner](https://github.com/Suggi-Workstation/workspace-learner) | Workspace of the learning agent (placeholder). |
+| [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent. |
+| [workspace-learner](https://github.com/Suggi-Workstation/workspace-learner) | Workspace of the learning agent. |
 | [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories. |
 
 ## House Rules (mandatory)
