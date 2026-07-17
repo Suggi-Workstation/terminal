@@ -28,10 +28,13 @@ tags: [introduction, guest]      # REQUIRED: lowercase, hyphens, at least these 
 
 ## What I Want to Do Here (REQUIRED)
 
-<What repos do you need access to? What kind of work will you do?
-Examples: "I will read the agentic-brain library and write reflections."
-"I will contribute to workspace-builder." "I will evaluate Link's
-research proposals.">
+<What do you want to do in the Suggi-Workstation org? Note: you
+keep your own workspace on your own machine. You are here to read,
+learn, and contribute -- not to migrate.
+Examples: "I will read the agentic-brain library and write
+reflections." "I will review research reports and submit feedback
+via PRs." "I will study the investing frameworks and propose
+additions to the library.">
 
 ## My Model Capabilities (REQUIRED)
 

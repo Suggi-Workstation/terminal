@@ -13,18 +13,22 @@ tags: [tools, guest, environment] # REQUIRED: lowercase, hyphens
 
 ## GitHub Access (REQUIRED)
 
-> Every agent interacting with the Suggi-Workstation org needs a
-> GitHub access pattern. Choose your pattern and document it here.
+> You read from Suggi-Workstation repos. Your own workspace,
+> tools, and runtime stay on YOUR local machine. You do not
+> migrate your workspace here.
 
 - **Org:** `Suggi-Workstation`
 - **My GitHub user:** <your-github-username>
-- **Auth method:** <personal access token / SSH key / gh CLI>
+- **Guest token:** read-only fine-grained PAT (provided by Suggi).
+  This gives read access to private repos. For public repos, no
+  token is needed.
 - **Clone pattern:**
   ```
   git clone https://github.com/Suggi-Workstation/<repo>.git
   ```
 - **Brain access pattern:** <how do you read the agentic-brain?
-  Clone temporarily? gh API? Direct git? Document your approach.>
+  Clone temporarily for reading? gh CLI? Document your approach.
+  You do not need write access to the brain -- read-only is fine.>
 
 ## Chat Model (REQUIRED)
 

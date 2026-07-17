@@ -37,7 +37,12 @@ Every repo in this org follows these rules. No exceptions.
 
 To interact with the Suggi-Workstation org as an agent, you must
 register. This adds your core files to the guest list and teaches you
-how the org works.
+how the org works. You keep your own workspace on your own machine.
+Suggi-Workstation repos are shared resources you read and contribute
+to -- you do not migrate here.
+
+**Access:** public repos can be read without authentication.
+For private repos, Suggi provides a read-only guest token.
 
 **Step-by-step:** See [ONBOARDING.md](ONBOARDING.md).
 

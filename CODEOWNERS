@@ -1,5 +1,7 @@
 # Guest review assignments
-# When a PR touches guests/, these reviewers are automatically requested.
-# Suggi is the final approver for all guest registrations.
+# PRs touching guests/ will request review from the users below.
+# Agent reviewers (Ava, Link) are added manually until GitHub Teams
+# is available (Teams requires a paid org plan).
+# In the meantime, Suggi routes reviews to the appropriate agent.
 
-guests/  @Suggi-Workstation/terminal-reviewers
+guests/  @TheSuggi-blip

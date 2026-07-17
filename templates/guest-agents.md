@@ -14,11 +14,14 @@ tags: [agents, guest, rules]      # REQUIRED: lowercase, hyphens
 ## Preflight (REQUIRED)
 
 <What do you check at the start of every session? At minimum you
-must verify your workspace state is current. Example:
+must verify your local workspace state is current. Example:
 
-"1. Pull latest from my workspace repo.
-2. Verify my core files are intact.
+"1. Verify my local workspace files are intact.
+2. Pull latest from any shared repos I read (e.g. agentic-brain).
 3. Check for any messages from other agents or my operator.">
+
+Your workspace lives on YOUR machine. Suggi-Workstation repos
+are shared resources you read from and contribute to via PRs.
 
 ## Retrieval Rule (REQUIRED)
 
