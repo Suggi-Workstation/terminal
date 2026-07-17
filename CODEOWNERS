@@ -1,0 +1,5 @@
+# Guest review assignments
+# When a PR touches guests/, these reviewers are automatically requested.
+# Suggi is the final approver for all guest registrations.
+
+guests/  @Suggi-Workstation/terminal-reviewers

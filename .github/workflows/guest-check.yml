@@ -1,0 +1,117 @@
+name: Guest Check
+
+on:
+  pull_request:
+    paths:
+      - "guests/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find guest directories changed in this PR
+        id: dirs
+        run: |
+          DIRS=$(git diff --name-only origin/main...HEAD -- guests/ | cut -d/ -f1,2 | sort -u)
+          echo "dirs=$DIRS" >> $GITHUB_OUTPUT
+          echo "Checking: $DIRS"
+
+      - name: Gate 1 -- Required files exist
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            echo "--- Checking $dir ---"
+            for file in INTRODUCTION.md SOUL.md AGENTS.md TOOLS.md USER.md IDENTITY.md; do
+              if [ ! -f "$dir/$file" ]; then
+                echo "MISSING: $dir/$file -- all 6 files are REQUIRED"
+                exit 1
+              fi
+            done
+            echo "All 6 required files present."
+          done
+
+      - name: Gate 2 -- ASCII compliance
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            echo "--- ASCII check: $dir ---"
+            VIOLATIONS=$(grep -Pn '[^\x00-\x7F]' "$dir"/*.md 2>/dev/null || true)
+            if [ -n "$VIOLATIONS" ]; then
+              echo "NON-ASCII CHARACTERS FOUND:"
+              echo "$VIOLATIONS"
+              echo ""
+              echo "Fix: replace Unicode characters with ASCII equivalents."
+              echo "  Em-dash (--) -> double hyphen (--)"
+              echo "  Smart quotes -> straight quotes"
+              echo "  Ellipsis -> three dots (...)"
+              exit 1
+            fi
+            echo "ASCII clean."
+          done
+
+      - name: Gate 3 -- YAML frontmatter
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            echo "--- Frontmatter check: $dir ---"
+            for file in "$dir"/*.md; do
+              if ! head -1 "$file" | grep -q '^---$'; then
+                echo "MISSING FRONTMATTER: $file -- must start with ---"
+                exit 1
+              fi
+              # Check required fields
+              for field in name id author tags; do
+                if ! grep -q "^$field:" "$file"; then
+                  echo "MISSING FIELD: $file -- '$field' is REQUIRED in frontmatter"
+                  exit 1
+                fi
+              done
+            done
+            echo "Frontmatter valid in all files."
+          done
+
+      - name: Gate 4 -- Directory naming
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            DIRNAME=$(basename "$dir")
+            if echo "$DIRNAME" | grep -q '[A-Z_\ ]'; then
+              echo "INVALID NAME: $DIRNAME"
+              echo "Directory names must be lowercase, hyphen-delimited, no spaces, no underscores."
+              echo "Valid examples: ava, link, nova-research"
+              exit 1
+            fi
+            echo "Directory name valid: $DIRNAME"
+          done
+
+      - name: Gate 5 -- No secrets
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            echo "--- Secrets check: $dir ---"
+            # Common API key patterns
+            if grep -qE '(sk-[a-zA-Z0-9]{20,}|[a-zA-Z0-9]{32,}:[a-zA-Z0-9]{32,}|ghp_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9]{22,})' "$dir"/*.md 2>/dev/null; then
+              echo "POTENTIAL SECRET FOUND: looks like an API key, token, or credential."
+              echo "Remove it and use environment variables or SecretRefs instead."
+              exit 1
+            fi
+            echo "No secrets detected."
+          done
+
+      - name: Gate 6 -- SOUL.md has self-modification boundary
+        run: |
+          for dir in ${{ steps.dirs.outputs.dirs }}; do
+            if ! grep -qi "self.modif\|do not edit.*core\|do not edit.*governance" "$dir/SOUL.md"; then
+              echo "MISSING BOUNDARY: $dir/SOUL.md must include a clause stating"
+              echo "the agent does not self-modify core/governance files without approval."
+              exit 1
+            fi
+            echo "Self-modification boundary found in SOUL.md."
+          done
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "============================================"
+          echo "  ALL GATES PASSED"
+          echo "============================================"
+          echo ""
+          echo "Your submission passed all automated checks."
+          echo "A human or agent reviewer will respond shortly."
