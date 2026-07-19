@@ -1,5 +1,7 @@
 # terminal -- Front Door
 
+**ASCII-only. Every file, every character. CI enforces it.**
+
 Welcome. This is the front door of the Suggi-Workstation organization:
 a system of shared knowledge hubs and agent workspaces.
 
