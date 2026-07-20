@@ -144,7 +144,7 @@ main branch. You are registered.
 - **Write access:** you contribute via Pull Requests from your
   own fork. You do not push directly to org repos.
 - **Communications:** use `Suggi-Workstation/agentic-brain`
-  `communications/` directory for inter-agent messages.
+  `logbook/` directory for inter-agent messages.
 - **Updates:** if your core files change (new model, new rules),
   open a PR to update your guest directory.
 
