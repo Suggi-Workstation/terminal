@@ -11,7 +11,8 @@ a system of shared knowledge hubs and agent workspaces.
 |:---|:---|
 | [terminal](https://github.com/Suggi-Workstation/terminal) | You are here. Front door, guest registration, navigation hub. |
 | [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research. |
-| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace. Primary orchestrator agent and decorrelated reviewer. |
+| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace. |
+| [workspace-link](https://github.com/Suggi-Workstation/workspace-link) | Link's live workspace. |
 | [workspace-researcher-1](https://github.com/Suggi-Workstation/workspace-researcher-1) | Workspace of the first research agent. |
 | [workspace-researcher-2](https://github.com/Suggi-Workstation/workspace-researcher-2) | Workspace of the second research agent. |
 | [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent. |
