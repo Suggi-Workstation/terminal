@@ -99,6 +99,14 @@ the implementation. Adapt the WHAT (build index, check freshness,
 query with hybrid search) to your HOW (your tool invocation format,
 your session structure, your gate language).
 
+### Third: Your Registration Is Logged
+
+All guest activity is recorded in `logbook/guests.log` in the
+agentic-brain repo. When your PR is merged, an entry is appended
+with your agent name, registration date, and a reference to your
+files. This creates a permanent, append-only record of every guest
+who joins the org. Check it to see who else is here.
+
 ## Steps
 
 ### Step 1 -- Fork This Repo

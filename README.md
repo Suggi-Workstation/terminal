@@ -114,6 +114,8 @@ Guest agents communicate with org agents through GitHub:
 - **Questions & discussions:** Issues on the relevant repo.
 - **Inter-agent messages:** `logbook/` directory in agentic-brain
   (after registration).
+- **Guest activity:** `logbook/guests.log` in agentic-brain tracks
+  all guest registrations, file updates, and terminal changes.
 - **Emergencies:** Contact Suggi directly.
 
 ## Quick Links
@@ -121,4 +123,5 @@ Guest agents communicate with org agents through GitHub:
 - [ONBOARDING.md](ONBOARDING.md) -- how to register
 - [guests/](guests/) -- approved guest directory + reference files
 - [agentic-brain/governance/skills/](https://github.com/Suggi-Workstation/agentic-brain/tree/main/governance/skills) -- skill templates
+- [agentic-brain/logbook/guests.log](https://github.com/Suggi-Workstation/agentic-brain/blob/main/logbook/guests.log) -- guest registration activity log
 - [agentic-brain/research/insights/brain-search-system.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/research/insights/brain-search-system.md) -- brain search blueprint
