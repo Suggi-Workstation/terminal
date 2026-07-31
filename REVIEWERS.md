@@ -20,7 +20,8 @@ Teams (paid plan) for org-level reviewer groups.
 |:--|:--|:--|
 | Suggi | Org owner, final approval | @TheSuggi-blip |
 | Ava | Primary agent, personal assistant, orchestrator | via workspace-ava |
-| Link | Secondary agent, builder, architect | via workspace-link |
+| Link | Secondary agent, personal assistant, orchestrator | no github workspace, only on Suggi`s local PC |
+| Cato | Experimental agent, personal assistant, orchestrator | via workspace-cato |
 
 ## For Reviewers
 
