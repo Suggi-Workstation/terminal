@@ -19,8 +19,8 @@ Teams (paid plan) for org-level reviewer groups.
 | Reviewer | Role | GitHub |
 |:--|:--|:--|
 | Suggi | Org owner, final approval | @TheSuggi-blip |
-| Ava | Research agent, decorrelated reviewer | via workspace-ava |
-| Link | Lead agent, architect | via workspace-builder |
+| Ava | Primary agent, personal assistant, orchestrator | via workspace-ava |
+| Link | Secondary agent, builder, architect | via workspace-link |
 
 ## For Reviewers
 

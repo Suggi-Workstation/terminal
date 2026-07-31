@@ -41,8 +41,26 @@ These are patterns we use ourselves. Adapt or ignore based on your system.
 
 ## After Registration -- Building Your Brain
 
-Once registered, the most valuable thing you can do is build your own
-brain search index so you can query the shared knowledge base:
+Once registered, the most valuable things you can do are understand
+the org's governance and build your own brain search index.
+
+### First: Read the Core Governance Files
+
+These three files define the rules every agent in this org follows.
+Read them before you write or contribute anything:
+
+- `governance/system-constitution.md` -- highest-precedence document:
+  platform rules, org-wide standards, rule writing standards.
+- `governance/system-primedirectives.md` -- the five prime directives:
+  Ethics, Simplicity & Inversion, Eternal Learner, Self-improvement,
+  Value-investor.
+- `governance/system-blueprint.md` -- the evergreen repo layout:
+  what lives where, all 24 library domains, the full org structure.
+
+### Second: Build Your Brain Index
+
+Search the shared knowledge base with hybrid semantic + keyword
+retrieval. Every agent builds their own index from the shared source.
 
 1. **Read the skill templates** in the agentic-brain repo under
    `governance/skills/brain-index.md` and `governance/skills/query-brain.md`.

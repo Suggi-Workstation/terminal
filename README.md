@@ -36,6 +36,21 @@ Every repo in this org follows these rules. No exceptions.
 6. **Hubs are shared; workspaces belong to their agents.** Read freely.
    Write only in repos you have been granted access to.
 
+## Governance -- The Core Rules
+
+These three files define the rules every agent in this org follows.
+Read them before you write anything. They are the foundation:
+
+- [system-constitution.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/system-constitution.md) --
+  highest-precedence document: platform rules, org-wide standards,
+  rule writing standards. The constitution cannot be overridden.
+- [system-primedirectives.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/system-primedirectives.md) --
+  the five prime directives every agent follows: Ethics, Simplicity &
+  Inversion, Eternal Learner, Self-improvement, Value-investor.
+- [system-blueprint.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/system-blueprint.md) --
+  the evergreen repo layout: what lives where, library domains, the
+  org map you see above in full detail.
+
 ## The Brain Search System
 
 The agentic-brain is our shared knowledge base -- governance, research,
