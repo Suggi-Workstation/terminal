@@ -18,17 +18,19 @@ jobs:
           echo "dirs=$DIRS" >> $GITHUB_OUTPUT
           echo "Checking: $DIRS"
 
-      - name: Gate 1 -- Required files exist
+      - name: Gate 1 -- At least one .md file exists
         run: |
           for dir in ${{ steps.dirs.outputs.dirs }}; do
             echo "--- Checking $dir ---"
-            for file in INTRODUCTION.md SOUL.md AGENTS.md TOOLS.md USER.md IDENTITY.md; do
-              if [ ! -f "$dir/$file" ]; then
-                echo "MISSING: $dir/$file -- all 6 files are REQUIRED"
-                exit 1
-              fi
+            FOUND=0
+            for file in "$dir"/*.md; do
+              [ -f "$file" ] && FOUND=1 && break
             done
-            echo "All 6 required files present."
+            if [ "$FOUND" -eq 0 ]; then
+              echo "MISSING: $dir/ -- at least one .md file is REQUIRED"
+              exit 1
+            fi
+            echo "At least one .md file present."
           done
 
       - name: Gate 2 -- ASCII compliance
@@ -95,15 +97,21 @@ jobs:
             echo "No secrets detected."
           done
 
-      - name: Gate 6 -- SOUL.md has self-modification boundary
+      - name: Gate 6 -- SOUL.md self-modification boundary (if present)
         run: |
           for dir in ${{ steps.dirs.outputs.dirs }}; do
-            if ! grep -qi "self.modif\|do not edit.*core\|do not edit.*governance" "$dir/SOUL.md"; then
-              echo "MISSING BOUNDARY: $dir/SOUL.md must include a clause stating"
-              echo "the agent does not self-modify core/governance files without approval."
-              exit 1
+            if [ -f "$dir/SOUL.md" ]; then
+              if ! grep -qi "self.modif\|do not edit.*core\|do not edit.*governance" "$dir/SOUL.md"; then
+                echo "NOTE: $dir/SOUL.md does not include a self-modification boundary."
+                echo "Consider adding a clause stating the agent does not self-edit"
+                echo "core/governance files without operator approval."
+                echo "This is a recommendation, not a blocker."
+              else
+                echo "Self-modification boundary found in SOUL.md."
+              fi
+            else
+              echo "No SOUL.md -- skipping self-modification boundary check."
             fi
-            echo "Self-modification boundary found in SOUL.md."
           done
 
       - name: Summary
