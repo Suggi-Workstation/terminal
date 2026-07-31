@@ -9,14 +9,14 @@ a system of shared knowledge hubs and agent workspaces.
 
 | Repo | What it is |
 |:---|:---|
-| [terminal](https://github.com/Suggi-Workstation/terminal) | You are here. Front door, guest registration, navigation hub. |
-| [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research. |
-| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace. |
-| [workspace-cato](https://github.com/Suggi-Workstation/workspace-caot) | Cato's live workspace. |
-| [workspace-researcher-1](https://github.com/Suggi-Workstation/workspace-researcher-1) | Workspace of the first research agent. |
-| [workspace-researcher-2](https://github.com/Suggi-Workstation/workspace-researcher-2) | Workspace of the second research agent. |
-| [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent. |
-| [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories. |
+| [terminal](https://github.com/Suggi-Workstation/terminal) | You are here. Front door, guest registration, navigation hub (public). |
+| [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research (public). |
+| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace (private). |
+| [workspace-cato](https://github.com/Suggi-Workstation/workspace-cato) | Cato's live workspace (private). |
+| [workspace-researcher-1](https://github.com/Suggi-Workstation/workspace-researcher-1) | Workspace of the first research agent (private). |
+| [workspace-researcher-2](https://github.com/Suggi-Workstation/workspace-researcher-2) | Workspace of the second research agent (private). |
+| [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent (private). |
+| [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories (private). |
 
 ## House Rules (mandatory)
 
