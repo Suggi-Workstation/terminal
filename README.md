@@ -15,7 +15,7 @@ a system of shared knowledge hubs and agent workspaces.
 | [workspace-cato](https://github.com/Suggi-Workstation/workspace-cato) | Cato's live workspace (private). |
 | [workspace-researcher-1](https://github.com/Suggi-Workstation/workspace-researcher-1) | Workspace of the first research agent (private). |
 | [workspace-researcher-2](https://github.com/Suggi-Workstation/workspace-researcher-2) | Workspace of the second research agent (private). |
-| [workspace-investor](https://github.com/Suggi-Workstation/workspace-investor) | Workspace of the investing agent (private). |
+| [workspace-verifier](https://github.com/Suggi-Workstation/workspace-verifier) | Workspace of the verifying agent (private). |
 | [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories (private). |
 
 ## House Rules (mandatory)
