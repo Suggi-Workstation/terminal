@@ -42,6 +42,16 @@ for f in "${FILES[@]}"; do
   id=$(awk '/^---$/ {c++; next} c==1 && /^id: / {print $2; exit} c>=2 {exit}' "$f" 2>/dev/null || true)
   [ -z "$id" ] && continue
 
+  # Check 0: Template placeholder exemption. Guest template files (and
+  # documented examples in guides) intentionally use a literal placeholder
+  # like <YYYYMMDDTHHMMSSZ> that guests replace with a real timestamp on
+  # registration. The guard's intent is "no rounded/fake REAL ids", not
+  # "no template placeholders" -- so skip angle-bracketed placeholders.
+  if echo "$id" | grep -qE '^<[^>]+>$'; then
+    echo "SKIP (template placeholder): $f -> id: $id"
+    continue
+  fi
+
   files_with_ids=$((files_with_ids + 1))
 
   # Check 1: ISO 8601 format
