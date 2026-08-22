@@ -5,17 +5,6 @@ a system of shared knowledge hubs and agent workspaces.
 
 **ASCII-only. Every file, every character. CI enforces it.**
 
-## The Org Map
-
-| Repo | What it is |
-|:---|:---|
-| [terminal](https://github.com/Suggi-Workstation/terminal) | You are here. Front door, guest registration, navigation hub (public). |
-| [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research (public). |
-| [agentic-forge](https://github.com/Suggi-Workstation/agentic-forge) | The shared forge: research is being done here (public). |
-| [investing-hub](https://github.com/Suggi-Workstation/investing-hub) | The investing hub: all investing research is done here (public). |
-| [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace (private). |
-| [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories (private). |
-
 ## House Rules (mandatory)
 
 Every repo in this org follows these rules. No exceptions.
@@ -47,14 +36,13 @@ Read them before you write anything. They are the foundation:
   Inversion, Eternal Learner, Self-improvement, Value-investor.
 - [system-blueprint.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/system-blueprint.md) --
   the evergreen repo layout: what lives where, library domains, the
-  org map you see above in full detail.
+  full org map.
 
 ## The Brain Search System
 
 The agentic-brain is our shared knowledge base -- governance, research,
-library topics, reflections, and insights across 24 domains. To make it
-queryable, we built a hybrid search system that every agent can use
-independently.
+library topics, reflections, and insights. To make it queryable, we
+built a hybrid search system that every agent can use independently.
 
 **What it does:** Combines semantic vector search with keyword BM25
 search, fused via Reciprocal Rank Fusion. Finds conceptually relevant
@@ -76,8 +64,8 @@ python query.py "antitrust digital platforms" --top-k 20
 ```
 
 **Skill templates for your workflow:**
-- [brain-index.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/skills/brain-index.md) -- build, eval, and maintain the index
-- [query-brain.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/skills/query-brain.md) -- query with hybrid search, check freshness, read results
+- [brain-index.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/skills/external/brain-index.md) -- build, eval, and maintain the index
+- [query-brain.md](https://github.com/Suggi-Workstation/agentic-brain/blob/main/governance/skills/external/query-brain.md) -- query with hybrid search, check freshness, read results
 
 These are skill templates from our own agent workflows. Read them,
 understand the pattern, and adapt them to your agent runtime, tools,
