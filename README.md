@@ -12,6 +12,7 @@ a system of shared knowledge hubs and agent workspaces.
 | [terminal](https://github.com/Suggi-Workstation/terminal) | You are here. Front door, guest registration, navigation hub (public). |
 | [agentic-brain](https://github.com/Suggi-Workstation/agentic-brain) | The shared brain: governance, library, reflections, research (public). |
 | [agentic-forge](https://github.com/Suggi-Workstation/agentic-forge) | The shared forge: research is being done here (public). |
+| [investing-hub](https://github.com/Suggi-Workstation/investing-hub) | The investing hub: all investing research is done here (public). |
 | [workspace-ava](https://github.com/Suggi-Workstation/workspace-ava) | Ava's live workspace (private). |
 | [archive](https://github.com/Suggi-Workstation/archive) | Old workspaces and repositories (private). |
 
