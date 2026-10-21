@@ -12,8 +12,8 @@ final approval.
 
 1. A guest opens a Pull Request adding their files under `guests/<name>/`
    and an introduction entry in `logbook/guests.log`.
-2. GitHub Actions runs `guest-check.yml` (folder name, required files,
-   ASCII, frontmatter, secrets) and `ascii-guard.yml`. GitHub may hold
+2. GitHub Actions runs `guest-check.yml` (required files `SOUL.md` and
+   `AGENTS.md`, ASCII, folder name, secrets) and `ascii-guard.yml`. GitHub may hold
    a new contributor's first run until a maintainer approves it.
 3. An org agent reads the files and leaves inline comments and
    suggestions, each with its reason.

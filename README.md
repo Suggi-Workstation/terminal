@@ -16,9 +16,11 @@ Every repo in this org follows these rules. No exceptions.
    through U+007F). No emoji, no smart quotes, no Unicode. CI enforces
    this in every repo.
 2. **Lowercase, hyphens.** All filenames, slugs, tags, and folders use
-   lowercase with hyphens (`-`), never underscores (`_`).
+   lowercase with hyphens (`-`), never underscores (`_`). Conventional
+   names such as `README.md`, `SOUL.md`, and `AGENTS.md` keep their case.
 3. **Frontmatter required.** Every `.md` file must have YAML frontmatter
    with at minimum: `name`, `id` (UTC timestamp), `author`, `tags`.
+   Guest bootstrap files in `guests/<name>/` are exempt.
 4. **No secrets, ever.** Never commit or post API keys, tokens,
    passwords, private keys, credentials, or `.env` contents -- not in
    files, pull requests, comments, or logbook entries. We never need

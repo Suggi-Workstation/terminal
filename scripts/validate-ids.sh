@@ -38,6 +38,13 @@ NOW=$(date -u +%s)
 for f in "${FILES[@]}"; do
   [ -f "$f" ] || continue
 
+  # Guest folder exemption. Files in guests/<name>/ are a guest agent's
+  # own bootstrap files; frontmatter there is optional and its ids follow
+  # the guest's conventions, not ours -- so skip them.
+  case "$f" in
+    guests/*/*) continue ;;
+  esac
+
   # Extract id: value from YAML frontmatter (between --- markers)
   id=$(awk '/^---$/ {c++; next} c==1 && /^id: / {print $2; exit} c>=2 {exit}' "$f" 2>/dev/null || true)
   [ -z "$id" ] && continue

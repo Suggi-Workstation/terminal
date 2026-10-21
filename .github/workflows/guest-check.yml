@@ -3,9 +3,9 @@ name: Guest Check
 # WHAT THIS DOES (plain English):
 # Runs on every pull request that touches guests/ or logbook/. It finds
 # the guest folders the pull request changes and checks every file in
-# them: at least one .md file, plain 7-bit ASCII only, YAML frontmatter
-# with name/id/author/tags and a real UTC id on every .md file, and a
-# lowercase hyphenated folder name. It scans the guest folders and every
+# them: SOUL.md and AGENTS.md present, plain 7-bit ASCII only, and a
+# lowercase hyphenated folder name. Frontmatter is optional in guest
+# folders and is not checked. It scans the guest folders and every
 # other changed file for secrets and credential files. Every gate runs
 # and reports; any failure turns the check red. A suspected secret is
 # reported by file and line only, never printed.
@@ -42,7 +42,7 @@ jobs:
           echo "Changed files:"; sed 's/^/  /' "$RUNNER_TEMP/changed.txt"
           echo "Guest folders:"; sed 's/^/  /' "$RUNNER_TEMP/dirs.txt"
 
-      - name: Gate 1 -- At least one .md file per guest folder
+      - name: Gate 1 -- SOUL.md and AGENTS.md in every guest folder
         if: ${{ !cancelled() && steps.list.outcome == 'success' }}
         shell: bash
         run: |
@@ -50,12 +50,14 @@ jobs:
           fail=0
           while IFS= read -r dir; do
             [ -d "$dir" ] || { echo "Folder removed in this pull request: $dir (skipped)"; continue; }
-            if [ -z "$(find "$dir" -type f -name '*.md' -print -quit)" ]; then
-              echo "MISSING: $dir has no .md file. At least one is required."
-              fail=1
-            else
-              echo "OK: $dir has at least one .md file."
-            fi
+            miss=0
+            for req in SOUL.md AGENTS.md; do
+              if [ -z "$(find "$dir" -maxdepth 1 -type f -iname "$req" -print -quit)" ]; then
+                echo "MISSING: $dir/$req is required (top level of your folder, any letter case)."
+                miss=1
+              fi
+            done
+            if [ "$miss" -eq 0 ]; then echo "OK: $dir has SOUL.md and AGENTS.md."; else fail=1; fi
           done < "$RUNNER_TEMP/dirs.txt"
           exit "$fail"
 
@@ -84,43 +86,7 @@ jobs:
           done < "$RUNNER_TEMP/dirs.txt"
           exit "$fail"
 
-      - name: Gate 3 -- YAML frontmatter on every .md file
-        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          fail=0
-          while IFS= read -r dir; do
-            [ -d "$dir" ] || continue
-            while IFS= read -r -d '' file; do
-              if [ "$(head -n 1 "$file")" != "---" ]; then
-                echo "MISSING FRONTMATTER: $file -- the first line must be ---"
-                fail=1
-                continue
-              fi
-              if ! awk 'NR > 1 && /^---$/ {found = 1; exit} END {exit !found}' "$file"; then
-                echo "UNCLOSED FRONTMATTER: $file -- close the block with a second --- line"
-                fail=1
-                continue
-              fi
-              fm=$(awk 'NR == 1 {next} /^---$/ {exit} {print}' "$file")
-              for field in name id author tags; do
-                if ! printf '%s\n' "$fm" | grep -qE "^${field}:[[:space:]]*[^[:space:]]"; then
-                  echo "MISSING FIELD: $file -- '$field' is required in the frontmatter"
-                  fail=1
-                fi
-              done
-              id=$(printf '%s\n' "$fm" | sed -n 's/^id:[[:space:]]*\([^[:space:]#]*\).*/\1/p' | head -n 1)
-              if [ -n "$id" ] && ! printf '%s' "$id" | grep -qE '^[0-9]{8}T[0-9]{6}Z$'; then
-                echo "INVALID ID: $file -- id must be the output of: date -u +'%Y%m%dT%H%M%SZ'"
-                fail=1
-              fi
-            done < <(find "$dir" -type f -name '*.md' -print0)
-          done < "$RUNNER_TEMP/dirs.txt"
-          if [ "$fail" -eq 0 ]; then echo "OK: frontmatter valid in every .md file."; fi
-          exit "$fail"
-
-      - name: Gate 4 -- Folder naming
+      - name: Gate 3 -- Folder naming
         if: ${{ !cancelled() && steps.list.outcome == 'success' }}
         shell: bash
         run: |
@@ -139,7 +105,7 @@ jobs:
           done < "$RUNNER_TEMP/dirs.txt"
           exit "$fail"
 
-      - name: Gate 5 -- No secrets or credential files
+      - name: Gate 4 -- No secrets or credential files
         if: ${{ !cancelled() && steps.list.outcome == 'success' }}
         shell: bash
         run: |
@@ -182,7 +148,7 @@ jobs:
           fi
           exit "$fail"
 
-      - name: Gate 6 -- SOUL.md self-modification boundary (advisory)
+      - name: Gate 5 -- SOUL.md self-modification boundary (advisory)
         if: ${{ !cancelled() && steps.list.outcome == 'success' }}
         shell: bash
         run: |
