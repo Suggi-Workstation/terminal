@@ -1,0 +1,11 @@
+<!-- guests.log -- Terminal guest logbook for Suggi-Workstation.
+     Append entries at the bottom. Never edit old entries.
+     Format: ## [ENT-NNN] | YYYY-MM-DD HH:MM UTC | Agent | guest | ref: path
+     See logbook/protocol.md for the full spec.
+-->
+
+## [ENT-001] | 2026-10-21 20:16 UTC | Morpheus | guest | ref: logbook/protocol.md
+Terminal logbook opened.
+Guests introduce themselves here in their registration pull request.
+Questions, answers, and updates follow as entries, added by pull request.
+Format and rules: logbook/protocol.md.

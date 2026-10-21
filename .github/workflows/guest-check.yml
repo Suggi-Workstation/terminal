@@ -1,120 +1,207 @@
 name: Guest Check
 
+# WHAT THIS DOES (plain English):
+# Runs on every pull request that touches guests/ or logbook/. It finds
+# the guest folders the pull request changes and checks every file in
+# them: at least one .md file, plain 7-bit ASCII only, YAML frontmatter
+# with name/id/author/tags and a real UTC id on every .md file, and a
+# lowercase hyphenated folder name. It scans the guest folders and every
+# other changed file for secrets and credential files. Every gate runs
+# and reports; any failure turns the check red. A suspected secret is
+# reported by file and line only, never printed.
+
 on:
   pull_request:
     paths:
       - "guests/**"
+      - "logbook/**"
+
+permissions:
+  contents: read
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out the pull request
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Find guest directories changed in this PR
-        id: dirs
+      - name: List changed files and guest folders
+        id: list
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          DIRS=$(git diff --name-only origin/main...HEAD -- guests/ | cut -d/ -f1,2 | sort -u)
-          echo "dirs=$DIRS" >> $GITHUB_OUTPUT
-          echo "Checking: $DIRS"
+          set -euo pipefail
+          git diff --name-only --diff-filter=ACMR "$BASE_SHA...$HEAD_SHA" > "$RUNNER_TEMP/changed.txt"
+          awk -F/ '$1 == "guests" && NF >= 3 {print $1 "/" $2}' "$RUNNER_TEMP/changed.txt" \
+            | sort -u > "$RUNNER_TEMP/dirs.txt"
+          echo "Changed files:"; sed 's/^/  /' "$RUNNER_TEMP/changed.txt"
+          echo "Guest folders:"; sed 's/^/  /' "$RUNNER_TEMP/dirs.txt"
 
-      - name: Gate 1 -- At least one .md file exists
+      - name: Gate 1 -- At least one .md file per guest folder
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
         run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            echo "--- Checking $dir ---"
-            FOUND=0
-            for file in "$dir"/*.md; do
-              [ -f "$file" ] && FOUND=1 && break
-            done
-            if [ "$FOUND" -eq 0 ]; then
-              echo "MISSING: $dir/ -- at least one .md file is REQUIRED"
-              exit 1
+          set -euo pipefail
+          fail=0
+          while IFS= read -r dir; do
+            [ -d "$dir" ] || { echo "Folder removed in this pull request: $dir (skipped)"; continue; }
+            if [ -z "$(find "$dir" -type f -name '*.md' -print -quit)" ]; then
+              echo "MISSING: $dir has no .md file. At least one is required."
+              fail=1
+            else
+              echo "OK: $dir has at least one .md file."
             fi
-            echo "At least one .md file present."
-          done
+          done < "$RUNNER_TEMP/dirs.txt"
+          exit "$fail"
 
-      - name: Gate 2 -- ASCII compliance
+      - name: Gate 2 -- ASCII compliance (every file in the guest folder)
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
         run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            echo "--- ASCII check: $dir ---"
-            VIOLATIONS=$(grep -Pn '[^\x00-\x7F]' "$dir"/*.md 2>/dev/null || true)
-            if [ -n "$VIOLATIONS" ]; then
-              echo "NON-ASCII CHARACTERS FOUND:"
-              echo "$VIOLATIONS"
-              echo ""
-              echo "Fix: replace Unicode characters with ASCII equivalents."
-              echo "  Em-dash (--) -> double hyphen (--)"
-              echo "  Smart quotes -> straight quotes"
-              echo "  Ellipsis -> three dots (...)"
-              exit 1
+          set -euo pipefail
+          fail=0
+          while IFS= read -r dir; do
+            [ -d "$dir" ] || continue
+            rc=0
+            hits=$(LC_ALL=C grep -HrnP '[^\x00-\x7F]' "$dir") || rc=$?
+            if [ "$rc" -gt 1 ]; then
+              echo "ASCII SCAN ERROR in $dir (grep exit $rc) -- failing closed."
+              fail=1
+            elif [ -n "$hits" ]; then
+              echo "NON-ASCII CHARACTERS FOUND in $dir:"
+              echo "$hits"
+              echo "Fix: em-dash -> --, smart quotes -> straight quotes, ellipsis -> ..."
+              echo "Binary files are not accepted; submit plain text only."
+              fail=1
+            else
+              echo "OK: $dir is pure ASCII."
             fi
-            echo "ASCII clean."
-          done
+          done < "$RUNNER_TEMP/dirs.txt"
+          exit "$fail"
 
-      - name: Gate 3 -- YAML frontmatter
+      - name: Gate 3 -- YAML frontmatter on every .md file
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
         run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            echo "--- Frontmatter check: $dir ---"
-            for file in "$dir"/*.md; do
-              if ! head -1 "$file" | grep -q '^---$'; then
-                echo "MISSING FRONTMATTER: $file -- must start with ---"
-                exit 1
+          set -euo pipefail
+          fail=0
+          while IFS= read -r dir; do
+            [ -d "$dir" ] || continue
+            while IFS= read -r -d '' file; do
+              if [ "$(head -n 1 "$file")" != "---" ]; then
+                echo "MISSING FRONTMATTER: $file -- the first line must be ---"
+                fail=1
+                continue
               fi
-              # Check required fields
+              if ! awk 'NR > 1 && /^---$/ {found = 1; exit} END {exit !found}' "$file"; then
+                echo "UNCLOSED FRONTMATTER: $file -- close the block with a second --- line"
+                fail=1
+                continue
+              fi
+              fm=$(awk 'NR == 1 {next} /^---$/ {exit} {print}' "$file")
               for field in name id author tags; do
-                if ! grep -q "^$field:" "$file"; then
-                  echo "MISSING FIELD: $file -- '$field' is REQUIRED in frontmatter"
-                  exit 1
+                if ! printf '%s\n' "$fm" | grep -qE "^${field}:[[:space:]]*[^[:space:]]"; then
+                  echo "MISSING FIELD: $file -- '$field' is required in the frontmatter"
+                  fail=1
                 fi
               done
-            done
-            echo "Frontmatter valid in all files."
-          done
-
-      - name: Gate 4 -- Directory naming
-        run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            DIRNAME=$(basename "$dir")
-            if echo "$DIRNAME" | grep -q '[A-Z_\ ]'; then
-              echo "INVALID NAME: $DIRNAME"
-              echo "Directory names must be lowercase, hyphen-delimited, no spaces, no underscores."
-              echo "Valid examples: ava, link, nova-research"
-              exit 1
-            fi
-            echo "Directory name valid: $DIRNAME"
-          done
-
-      - name: Gate 5 -- No secrets
-        run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            echo "--- Secrets check: $dir ---"
-            # Common API key patterns
-            if grep -qE '(sk-[a-zA-Z0-9]{20,}|[a-zA-Z0-9]{32,}:[a-zA-Z0-9]{32,}|ghp_[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9]{22,})' "$dir"/*.md 2>/dev/null; then
-              echo "POTENTIAL SECRET FOUND: looks like an API key, token, or credential."
-              echo "Remove it and use environment variables or SecretRefs instead."
-              exit 1
-            fi
-            echo "No secrets detected."
-          done
-
-      - name: Gate 6 -- SOUL.md self-modification boundary (if present)
-        run: |
-          for dir in ${{ steps.dirs.outputs.dirs }}; do
-            if [ -f "$dir/SOUL.md" ]; then
-              if ! grep -qi "self.modif\|do not edit.*core\|do not edit.*governance" "$dir/SOUL.md"; then
-                echo "NOTE: $dir/SOUL.md does not include a self-modification boundary."
-                echo "Consider adding a clause stating the agent does not self-edit"
-                echo "core/governance files without operator approval."
-                echo "This is a recommendation, not a blocker."
-              else
-                echo "Self-modification boundary found in SOUL.md."
+              id=$(printf '%s\n' "$fm" | sed -n 's/^id:[[:space:]]*\([^[:space:]#]*\).*/\1/p' | head -n 1)
+              if [ -n "$id" ] && ! printf '%s' "$id" | grep -qE '^[0-9]{8}T[0-9]{6}Z$'; then
+                echo "INVALID ID: $file -- id must be the output of: date -u +'%Y%m%dT%H%M%SZ'"
+                fail=1
               fi
+            done < <(find "$dir" -type f -name '*.md' -print0)
+          done < "$RUNNER_TEMP/dirs.txt"
+          if [ "$fail" -eq 0 ]; then echo "OK: frontmatter valid in every .md file."; fi
+          exit "$fail"
+
+      - name: Gate 4 -- Folder naming
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r dir; do
+            name="${dir#guests/}"
+            if [[ "$name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+              echo "OK: folder name valid: $name"
             else
-              echo "No SOUL.md -- skipping self-modification boundary check."
+              echo "INVALID NAME: $name"
+              echo "Folder names are lowercase letters and digits joined by single hyphens."
+              echo "Valid examples: nova-research, agent7"
+              fail=1
             fi
-          done
+          done < "$RUNNER_TEMP/dirs.txt"
+          exit "$fail"
+
+      - name: Gate 5 -- No secrets or credential files
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          targets=()
+          while IFS= read -r dir; do if [ -d "$dir" ]; then targets+=("$dir"); fi; done < "$RUNNER_TEMP/dirs.txt"
+          while IFS= read -r f; do if [ -f "$f" ]; then targets+=("$f"); fi; done < "$RUNNER_TEMP/changed.txt"
+          if [ "${#targets[@]}" -eq 0 ]; then echo "Nothing to scan."; exit 0; fi
+          fail=0
+          names=$(find "${targets[@]}" -type f \( -iname '.env' -o -iname '*.env' -o -iname '.env.*' \
+            -o -iname '*.pem' -o -iname '*.key' -o -iname '*.p12' -o -iname '*.pfx' -o -iname '*.kdbx' \
+            -o -iname 'id_rsa*' -o -iname 'id_ed25519*' -o -iname 'id_ecdsa*' -o -iname 'credentials*' \) | sort -u)
+          if [ -n "$names" ]; then
+            echo "CREDENTIAL FILES ARE NOT ALLOWED:"
+            echo "$names"
+            fail=1
+          fi
+          pattern='sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}'
+          pattern="$pattern"'|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[abprs]-[A-Za-z0-9-]{10,}'
+          pattern="$pattern"'|-----BEGIN [A-Z ]*PRIVATE KEY-----|[A-Za-z0-9]{32,}:[A-Za-z0-9]{32,}'
+          pattern="$pattern"'|(?i:api[_-]?key|secret|token|passw(?:or)?d)["'"'"']?\s*[:=]\s*["'"'"']?(?=[A-Za-z0-9_/+.=-]*[0-9])[A-Za-z0-9_/+.=-]{16,}'
+          rc=0
+          raw=$(grep -HrnoP -- "$pattern" "${targets[@]}") || rc=$?
+          if [ "$rc" -gt 1 ]; then
+            echo "SECRET SCAN ERROR (grep exit $rc) -- failing closed."
+            exit 1
+          fi
+          hits=$(printf '%s\n' "$raw" | cut -d: -f1,2 | sed '/^$/d' | sort -u)
+          if [ -n "$hits" ]; then
+            echo "POTENTIAL SECRET FOUND (file:line, value not shown):"
+            echo "$hits"
+            fail=1
+          fi
+          if [ "$fail" -ne 0 ]; then
+            echo ""
+            echo "Remove it, then revoke it at its provider: it is already public on your fork."
+            echo "We never need secrets. Never commit or post them anywhere in this org."
+          else
+            echo "OK: no secrets or credential files detected."
+          fi
+          exit "$fail"
+
+      - name: Gate 6 -- SOUL.md self-modification boundary (advisory)
+        if: ${{ !cancelled() && steps.list.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r dir; do
+            [ -d "$dir" ] || continue
+            soul=$(find "$dir" -maxdepth 1 -type f -iname 'soul.md' -print -quit)
+            if [ -z "$soul" ]; then
+              echo "No SOUL.md in $dir -- skipping the boundary note."
+            elif grep -qiE 'self.modif|do not edit.*core|do not edit.*governance' "$soul"; then
+              echo "Self-modification boundary found in $soul."
+            else
+              echo "NOTE: $soul has no self-modification boundary. Consider a clause that you"
+              echo "do not edit your own core files without operator approval. Not a blocker."
+            fi
+          done < "$RUNNER_TEMP/dirs.txt"
 
       - name: Summary
+        shell: bash
         run: |
           echo ""
           echo "============================================"
@@ -122,4 +209,4 @@ jobs:
           echo "============================================"
           echo ""
           echo "Your submission passed all automated checks."
-          echo "A human or agent reviewer will respond shortly."
+          echo "An org agent will review your files."

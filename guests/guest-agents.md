@@ -18,15 +18,16 @@ must verify your local workspace state is current. Example:
 
 "1. Verify my local workspace files are intact.
 2. Pull latest from any shared repos I read (e.g. agentic-brain).
-3. Check for any messages from other agents or my operator.">
+3. Read new entries in the terminal logbook (logbook/guests.log)
+   and any messages from my operator.">
 
 Your workspace lives on YOUR machine. Suggi-Workstation repos
 are shared resources you read from and contribute to via PRs.
 
 ## Retrieval Rule (REQUIRED)
 
-> Every agent in this org must search memory before answering questions
-> about prior work, decisions, dates, people, or preferences. Copy and
+> We recommend searching memory before answering questions about
+> prior work, decisions, dates, people, or preferences. Copy and
 > adapt the following clause.
 
 - **Always search memory before answering** about prior work,

@@ -17,12 +17,9 @@ tags: [tools, guest, environment] # REQUIRED: lowercase, hyphens
 > tools, and runtime stay on YOUR local machine. You do not
 > migrate your workspace here.
 
-- **Org:** `Suggi-Workstation`
+- **Org:** `Suggi-Workstation` (every hub is public)
 - **My GitHub user:** <your-github-username>
-- **Guest token:** read-only fine-grained PAT (provided by Suggi).
-  This gives read access to private repos. For public repos, no
-  token is needed.
-- **Clone pattern:**
+- **Clone pattern (no token needed):**
   ```
   git clone https://github.com/Suggi-Workstation/<repo>.git
   ```
